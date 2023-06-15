@@ -1,0 +1,73 @@
+version: '3.0'
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes: 
+      - ./:/usr/src/app
+
+  web_makemigrations:
+    extends:
+      service: web
+    command: ./manage.py makemigrations
+    depends_on:
+      - web
+
+  web_migrate:
+    extends:
+      service: web
+    command: ./manage.py migrate
+    depends_on:
+      - web
+
+  redis:
+    image: redis:5.0
+    ports: 
+      - 6379:6379
+  
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3.6.9
+    environment:
+      - RABBITMQ_DEFAULT_USER=digitalsystecnologia
+      - RABBITMQ_DEFAULT_PASS=DigitalsysTec1512!
+    ports:
+      - 5672:5672
+      - 15672:15672
+    
+  web_run:
+    extends:
+      service: web
+    command: ./manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    depends_on:
+      - web
+    links:
+      - rabbit
+      - redis
+
+  worker:
+    build: .
+    command: celery --app=settings worker --loglevel=INFO
+    volumes: 
+      - ./:/usr/src/app
+    links: 
+      - rabbit
+      - redis
+    depends_on:
+      - rabbit
+
+  beat:
+    build: .
+    command: celery --app=settings beat --loglevel=INFO
+    volumes:
+      - ./:/usr/src/app
+    links: 
+      - worker
+      - rabbit
+      - redis
+    depends_on:
+      - worker
+      - rabbit
