@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Proposta
 
-# Register your models here.
+
+@admin.register(Proposta)
+class PropostaAdmin(admin.ModelAdmin):
+    pass
