@@ -20,15 +20,11 @@ services:
     command: ./manage.py migrate
     depends_on:
       - web
-
-  redis:
-    image: redis:5.0
-    ports: 
-      - 6379:6379
+      - web_makemigrations
   
   rabbit:
     hostname: rabbit
-    image: rabbitmq:3.6.9
+    image: rabbitmq:3-management
     environment:
       - RABBITMQ_DEFAULT_USER=digitalsystecnologia
       - RABBITMQ_DEFAULT_PASS=DigitalsysTec1512!
@@ -44,9 +40,10 @@ services:
       - 8000:8000
     depends_on:
       - web
+      - web_makemigrations
+      - web_migrate
     links:
       - rabbit
-      - redis
 
   worker:
     build: .
@@ -55,7 +52,6 @@ services:
       - ./:/usr/src/app
     links: 
       - rabbit
-      - redis
     depends_on:
       - rabbit
 
@@ -67,7 +63,6 @@ services:
     links: 
       - worker
       - rabbit
-      - redis
     depends_on:
       - worker
       - rabbit
