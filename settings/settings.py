@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_celery_beat',
+    'celery',
 ]
 
 MIDDLEWARE = [
@@ -102,14 +103,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-BROKER_URL = os.environ.get('RABBITMQ_URL', 'django://')
-
+BROKER_URL = os.environ.get(
+    'RABBITMQ_URL',
+    'amqp://digitalsystecnologia:DigitalsysTec1512!@rabbit:5672/'
+)
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 
