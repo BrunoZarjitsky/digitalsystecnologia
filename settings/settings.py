@@ -12,21 +12,26 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env()
+env_file = Path(str(BASE_DIR / ".env"))
+if env_file.is_file():
+    env.read_env(env_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$xco9x0r&mm2kzz)#_!6e0)pc7fo26f1(+i5ehzdrnwig!(t77'
+SECRET_KEY = env("SECRET_KEY", default="DjangoSecretKey")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost']
 
 
 # Application definition
@@ -104,10 +109,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-BROKER_URL = os.environ.get(
-    'RABBITMQ_URL',
-    'amqp://digitalsystecnologia:DigitalsysTec1512!@rabbit:5672/'
-)
+# Celery connection with rabbitmq
+BROKER_USER = env('BROKER_USER', default='guest')
+BROKER_PASS = env('BROKER_PASS', default='guest')
+BROKER_HOST = env('BROKER_HOST', default='localhost')
+BROKER_PORT = env('BROKER_PORT', default='5672')
+BROKER_VHOST = env('BROKER_VHOST', default='/')
+
+BROKER_URL = f"amqp://{BROKER_USER}:{BROKER_PASS}@{BROKER_HOST}:{BROKER_PORT}/{BROKER_VHOST}"
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
