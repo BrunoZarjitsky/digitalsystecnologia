@@ -46,32 +46,32 @@ class RabbitService:
         }
         return message
 
-    def publish_message(self, channel, queue, message):
+    def publish_message(self, queue, message):
         if self.connection is None:
             self.create_connection()
         if self.channel is None:
             self.connect_channel()
-        hrds = {
+        headers = {
             'lang': 'py',
-            'task': 'propostas.tasks.add',
+            'task': message['task'],
             'argsrepr': repr(message['args']),
             'kwargsrepr': repr(message['kwargs']),
             'origin': '@'.join([str(os.getpid()), str(socket.gethostname())])
         }
         properties = pika.BasicProperties(
             content_type='application/json',
-            headers=hrds,
+            headers=headers,
             content_encoding='utf-8',
             correlation_id=message['id']
         )
-        channel.basic_publish(
+        self.channel.basic_publish(
             exchange='',
             routing_key=queue,
             body=json.dumps(message),
             properties=properties
         )
 
-    def close_connection(self, connection):
+    def close_connection(self):
         self.connection.close()
         self.connection = None
         self.channel = None
