@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import status
 from .models import Proposta
 from .serializers import PropostaSerializer
+from .proposta_utils import formata_cpf
 
 
 class PropostaViewSet(ViewSet):
@@ -16,7 +17,7 @@ class PropostaViewSet(ViewSet):
             propostas = Proposta.objects.all()
             serializer = PropostaSerializer(propostas, many=True)
             return Response(
-                data={"data": serializer.data},
+                data=serializer.data,
                 status=status.HTTP_200_OK
             )
         except Exception as error:
@@ -31,7 +32,7 @@ class PropostaViewSet(ViewSet):
             propostas = Proposta.objects.get(id=request.data.get("id", None))
             serializer = PropostaSerializer(propostas)
             return Response(
-                data={"data": serializer.data},
+                data=serializer.data,
                 status=status.HTTP_200_OK
             )
         except Exception as error:
@@ -43,7 +44,9 @@ class PropostaViewSet(ViewSet):
     @action(detail=False, methods=['POST'], url_path='nova_proposta')
     def post_nova_proposta(self, request):
         try:
-            proposta = PropostaSerializer(data=request.data)
+            data = request.data
+            data['cpf'] = formata_cpf(data.get('cpf', ''))
+            proposta = PropostaSerializer(data=data)
             proposta.is_valid()
             proposta.save()
             return Response(
@@ -52,6 +55,6 @@ class PropostaViewSet(ViewSet):
             )
         except Exception as error:
             return Response(
-                data={"detail": error},
+                data={"detail": str(error)},
                 status=status.HTTP_400_BAD_REQUEST
             )
