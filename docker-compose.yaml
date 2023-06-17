@@ -66,3 +66,12 @@ services:
     depends_on:
       - worker
       - rabbit
+
+  superuser:
+    build: .
+    entrypoint: ./create_admin.sh
+    volumes:
+      - ./:/usr/src/app
+    depends_on:
+      - web_migrate
+    env_file: .env
