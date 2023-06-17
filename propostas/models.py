@@ -38,7 +38,7 @@ class Proposta(models.Model):
         verbose_name_plural = "Propostas"
 
     def __str__(self):
-        return f"{self.cpf} - {self.valor_emprestimo}"
+        return f"{self.cpf} - {self.valor_emprestimo} - {self.status}"
 
 
 @receiver(post_save, sender=Proposta, dispatch_uid="chama_avalia_proposta")
