@@ -9,8 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-import os
-
 from pathlib import Path
 import environ
 
@@ -112,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Celery connection with rabbitmq
-BROKER_USER = env('BROKER_USER', default='guest')
-BROKER_PASS = env('BROKER_PASS', default='guest')
-BROKER_HOST = env('BROKER_HOST', default='localhost')
+BROKER_USER = env('BROKER_USER', default='digitalsystecnologia')
+BROKER_PASS = env('BROKER_PASS', default='DigitalsysTec1512!')
+BROKER_HOST = env('BROKER_HOST', default='rabbit')
 BROKER_PORT = env('BROKER_PORT', default='5672')
 BROKER_VHOST = env('BROKER_VHOST', default='/')
 

@@ -41,9 +41,10 @@ class Proposta(models.Model):
         return f"{self.cpf} - {self.valor_emprestimo} - {self.status}"
 
 
+# Signal post_save
+# Envia para a fila do Rabbit novas propostas
 @receiver(post_save, sender=Proposta, dispatch_uid="chama_avalia_proposta")
 def chama_avalia_proposta(sender, instance, created, **kwargs):
-    # if instance.status != Proposta.StatusPossiveis.EM_ANALISE:
     if not created:
         return None
     service = RabbitService()

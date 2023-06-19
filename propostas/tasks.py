@@ -2,6 +2,7 @@ from settings.celery import app
 from .models import Proposta
 
 
+# Avalia o status de uma propostas mantendo a proporção de 50% entre aprovadas e negadas
 @app.task
 def avalia_proposta(proposta_id):
     todas_propostas = Proposta.objects.all()
@@ -17,6 +18,7 @@ def avalia_proposta(proposta_id):
     proposta.save(update_fields=['status'])
 
 
+# Avalia o status de uma lista de propostas mantendo a proporção de 50% entre aprovadas e negadas
 @app.task
 def avalia_lista_propostas(lista_propostas_id):
     propostas_atualizadas = []

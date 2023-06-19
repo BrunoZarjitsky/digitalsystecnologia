@@ -7,7 +7,7 @@ from .views import PropostaViewSet
 
 router = routers.SimpleRouter()
 
-router.register("proposta", PropostaViewSet, basename="proposta")
+router.register("", PropostaViewSet, basename="proposta")
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -6,7 +6,7 @@ const PropostaList = () => {
   const [propostas, setPropostas] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/proposta/propostas/')
+    axios.get('http://localhost:8000/api/propostas/')
       .then((response) => {
         setPropostas(response.data);
       })

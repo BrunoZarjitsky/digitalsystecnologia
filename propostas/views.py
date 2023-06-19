@@ -11,6 +11,7 @@ from .proposta_utils import formata_cpf
 class PropostaViewSet(ViewSet):
     permission_classes = (AllowAny, )
 
+    # Solicita todas as propostas
     @action(detail=False, methods=['GET'], url_path="propostas")
     def get_propostas(self, request):
         try:
@@ -26,7 +27,8 @@ class PropostaViewSet(ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    @action(detail=False, methods=['GET'], url_path="proposta_detail")
+    # Solicita uma proposta
+    @action(detail=False, methods=['GET'], url_path="propostas/detail")
     def get_proposta_detail(self, request):
         try:
             propostas = Proposta.objects.get(id=request.data.get("id", None))
@@ -41,7 +43,8 @@ class PropostaViewSet(ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    @action(detail=False, methods=['POST'], url_path='nova_proposta')
+    # Cria uma nova proposta
+    @action(detail=False, methods=['POST'], url_path='propostas/nova')
     def post_nova_proposta(self, request):
         try:
             data = request.data

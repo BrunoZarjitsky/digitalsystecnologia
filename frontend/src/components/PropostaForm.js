@@ -12,7 +12,7 @@ const PropostaForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    axios.post('http://localhost:8000/proposta/nova_proposta/', data)
+    axios.post('http://localhost:8000/api/propostas/nova/', data)
       .then((response) => {
         console.log(response.data);
         window.location.href = 'http://localhost:3000';
