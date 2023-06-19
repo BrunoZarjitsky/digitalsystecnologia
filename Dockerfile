@@ -8,6 +8,7 @@ COPY requirements.txt /usr/src/app
 RUN apt-get update && \
     apt-get install -y apt-utils binutils libproj-dev gdal-bin npm
 RUN npm install -g yarn
+RUN npm install --save react react-dom
 
 RUN pip install -r requirements.txt --no-cache-dir
 
