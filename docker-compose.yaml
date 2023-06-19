@@ -76,7 +76,7 @@ services:
 
   frontend:
     build: .
-    command: yarn --cwd frontend start BROWSER=none
+    entrypoint: ./start_frontend.sh
     volumes: 
       - ./:/usr/src/app
     ports:
