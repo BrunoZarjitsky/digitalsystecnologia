@@ -25,9 +25,7 @@ services:
   rabbit:
     hostname: rabbit
     image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_DEFAULT_USER=digitalsystecnologia
-      - RABBITMQ_DEFAULT_PASS=DigitalsysTec1512!
+    env_file: .env
     ports:
       - 5672:5672
       - 15672:15672
@@ -75,3 +73,11 @@ services:
     depends_on:
       - web_migrate
     env_file: .env
+
+  frontend:
+    build: .
+    command: yarn --cwd frontend start BROWSER=none
+    volumes: 
+      - ./:/usr/src/app
+    ports:
+      - 3000:3000
